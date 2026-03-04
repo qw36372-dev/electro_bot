@@ -7,9 +7,16 @@ load_dotenv()
 
 # ── Telegram ────────────────────────────────────────────────
 BOT_TOKEN: str = os.getenv("API_TOKEN", "")
-ADMIN_IDS: list[int] = [
-    int(i) for i in os.getenv("ADMIN_IDS", "").split(",") if i.strip()
-]
+def _parse_admin_ids() -> list:
+    raw = os.getenv("ADMIN_IDS", "")
+    result = []
+    for part in raw.split(","):
+        part = part.strip()
+        if part.lstrip("-").isdigit():
+            result.append(int(part))
+    return result
+
+ADMIN_IDS: list = _parse_admin_ids()
 LEADS_CHANNEL_ID: str = os.getenv("LEADS_CHANNEL_ID", "")
 DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///bot.db")
 
