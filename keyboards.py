@@ -31,18 +31,41 @@ building_type_house_kb = kb(
     [("1️⃣ 1 этаж", "bt_1floor"), ("2️⃣ 2+ этажа", "bt_2floor")]
 )
 
-# ── Количество комнат ────────────────────────────────────────
+# ── Количество комнат ─────────────────────────────────────────
+# Студия=0, 1, 2, 3, 4+
 rooms_kb = kb(
-    [("1", "rooms_1"), ("2", "rooms_2"), ("3", "rooms_3")],
-    [("4", "rooms_4"), ("5+", "rooms_5plus")],
+    [("Студия", "rooms_studio"), ("1", "rooms_1"), ("2", "rooms_2")],
+    [("3", "rooms_3"), ("4+", "rooms_4plus")],
 )
 
-# ── Материал стен ────────────────────────────────────────────
-wall_kb = kb(
-    [("🧱 Бетон", "wall_concrete"), ("🏗 Кирпич", "wall_brick")],
-    [("🪨 Газоблок/пеноблок", "wall_gas"), ("🪵 Дерево", "wall_wood")],
-    [("❓ Другое", "wall_other")],
-)
+# ── Материал стен (множественный выбор) ──────────────────────
+_WALL_OPTIONS = [
+    ("wall_concrete", "🧱 Бетон"),
+    ("wall_brick",    "🏗 Кирпич"),
+    ("wall_gas",      "🪨 Газоблок/пеноблок"),
+    ("wall_wood",     "🪵 Дерево"),
+    ("wall_other",    "❓ Другое"),
+]
+
+WALL_KEY_TO_LABEL = {
+    "wall_concrete": "Бетон",
+    "wall_brick":    "Кирпич",
+    "wall_gas":      "Газоблок/пеноблок",
+    "wall_wood":     "Дерево",
+    "wall_other":    "Другое",
+}
+
+
+def wall_kb_multi(selected: list) -> InlineKeyboardMarkup:
+    """Динамическая клавиатура выбора материала стен с чекбоксами."""
+    rows = []
+    for cb_key, full_label in _WALL_OPTIONS:
+        label_clean = WALL_KEY_TO_LABEL[cb_key]
+        prefix = "✅ " if label_clean in selected else ""
+        rows.append([(f"{prefix}{full_label}", f"wall_toggle_{cb_key}")])
+    rows.append([("➡️ Далее", "wall_done")])
+    return kb(*rows)
+
 
 # ── Да / Нет ─────────────────────────────────────────────────
 yes_no_kb = kb([("✅ Да", "yn_yes"), ("❌ Нет", "yn_no")])
@@ -68,9 +91,7 @@ admin_menu_kb = kb(
 
 
 def prices_kb(settings: dict) -> InlineKeyboardMarkup:
-    """Клавиатура со списком цен для редактирования."""
     from config import PRICE_LABELS
-
     rows = []
     for key, label in PRICE_LABELS.items():
         val = int(settings.get(key, 0))
@@ -80,9 +101,7 @@ def prices_kb(settings: dict) -> InlineKeyboardMarkup:
 
 
 def coeffs_kb(settings: dict) -> InlineKeyboardMarkup:
-    """Клавиатура со списком коэффициентов для редактирования."""
     from config import COEFF_LABELS
-
     rows = []
     for key, label in COEFF_LABELS.items():
         val = settings.get(key, 0)
