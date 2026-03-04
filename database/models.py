@@ -3,7 +3,7 @@
 from datetime import datetime
 
 from sqlalchemy import (
-    Boolean, Column, Float, Integer, String, Text, Timestamp,
+    Boolean, Column, DateTime, Float, Integer, Text,
     func,
 )
 from sqlalchemy.orm import DeclarativeBase
@@ -21,7 +21,7 @@ class Setting(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     key = Column(Text, unique=True, nullable=False)
     value = Column(Float, nullable=False)
-    updated_at = Column(Timestamp, server_default=func.now(), onupdate=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
 
 class Lead(Base):
@@ -65,4 +65,4 @@ class Lead(Base):
     client_phone = Column(Text)
     contact_method = Column(Text)
 
-    created_at = Column(Timestamp, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)
