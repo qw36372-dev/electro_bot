@@ -54,12 +54,18 @@ class Lead(Base):
     washing_machine = Column(Integer, default=0)
     dishwasher = Column(Integer, default=0)
 
+    city = Column(Text)
+    district = Column(Text)
+    outdoor_work = Column(Text)
+
     shield_needed = Column(Boolean, default=False)
     low_voltage = Column(Boolean, default=False)
     demolition = Column(Integer, default=0)
 
     price_min = Column(Integer)
     price_max = Column(Integer)
+
+    extra_info = Column(Text)
 
     client_name = Column(Text)
     client_phone = Column(Text)
