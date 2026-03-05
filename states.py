@@ -4,9 +4,17 @@ from aiogram.fsm.state import State, StatesGroup
 
 
 class CalcStates(StatesGroup):
+    # Геолокация
+    enter_city = State()
+    enter_district = State()
+
     # Тип объекта
     choose_object_type = State()
     choose_building_type = State()
+
+    # Доп. работы на участке (только для дома)
+    ask_outdoor_work = State()
+    choose_outdoor_types = State()
 
     # Общие параметры
     enter_area = State()
@@ -24,16 +32,19 @@ class CalcStates(StatesGroup):
     enter_stove = State()
     enter_oven = State()
     enter_ac = State()
-    enter_boiler = State()
     enter_floor_heating = State()
     enter_washing_machine = State()
     enter_dishwasher = State()
 
-    # Дополнительные работы
+    # Блок да/нет
+    enter_boiler = State()
     ask_shield = State()
     ask_low_voltage = State()
     ask_demolition = State()
     enter_demolition_count = State()
+
+    # Доп. сведения мастеру
+    enter_extra_info = State()
 
     # Контакты
     enter_name = State()
@@ -45,13 +56,8 @@ class CalcStates(StatesGroup):
 
 
 class AdminStates(StatesGroup):
-    # Управление ценами
     choose_price_item = State()
     enter_new_price = State()
-
-    # Управление коэффициентами
     choose_coeff_item = State()
     enter_new_coeff = State()
-
-    # Разброс
     enter_spread = State()

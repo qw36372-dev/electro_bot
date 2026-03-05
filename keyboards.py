@@ -4,7 +4,6 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 def kb(*rows: list[tuple[str, str]]) -> InlineKeyboardMarkup:
-    """Вспомогательная функция: создаёт inline-клавиатуру из списка строк [(text, callback_data)]."""
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text=t, callback_data=d) for t, d in row]
@@ -32,7 +31,6 @@ building_type_house_kb = kb(
 )
 
 # ── Количество комнат ─────────────────────────────────────────
-# Студия=0, 1, 2, 3, 4+
 rooms_kb = kb(
     [("Студия", "rooms_studio"), ("1", "rooms_1"), ("2", "rooms_2")],
     [("3", "rooms_3"), ("4+", "rooms_4plus")],
@@ -57,7 +55,6 @@ WALL_KEY_TO_LABEL = {
 
 
 def wall_kb_multi(selected: list) -> InlineKeyboardMarkup:
-    """Динамическая клавиатура выбора материала стен с чекбоксами."""
     rows = []
     for cb_key, full_label in _WALL_OPTIONS:
         label_clean = WALL_KEY_TO_LABEL[cb_key]
@@ -66,6 +63,34 @@ def wall_kb_multi(selected: list) -> InlineKeyboardMarkup:
     rows.append([("➡️ Далее", "wall_done")])
     return kb(*rows)
 
+
+# ── Работы на участке (множественный выбор) ──────────────────
+_OUTDOOR_OPTIONS = [
+    ("outdoor_garage",    "🚗 Гараж"),
+    ("outdoor_outbuilds", "🏚 Хозпостройки"),
+    ("outdoor_landscape", "🌳 Ландшафтные работы"),
+]
+
+OUTDOOR_KEY_TO_LABEL = {
+    "outdoor_garage":    "Гараж",
+    "outdoor_outbuilds": "Хозпостройки",
+    "outdoor_landscape": "Ландшафтные работы",
+}
+
+
+def outdoor_kb_multi(selected: list) -> InlineKeyboardMarkup:
+    rows = []
+    for cb_key, full_label in _OUTDOOR_OPTIONS:
+        label_clean = OUTDOOR_KEY_TO_LABEL[cb_key]
+        prefix = "✅ " if label_clean in selected else ""
+        rows.append([(f"{prefix}{full_label}", f"outdoor_toggle_{cb_key}")])
+    rows.append([("➡️ Далее", "outdoor_done")])
+    return kb(*rows)
+
+
+
+# ── Кнопка пропуска доп. сведений ────────────────────────────
+skip_extra_kb = kb([('❌ Нет', 'extra_skip')])
 
 # ── Да / Нет ─────────────────────────────────────────────────
 yes_no_kb = kb([("✅ Да", "yn_yes"), ("❌ Нет", "yn_no")])
