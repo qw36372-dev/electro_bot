@@ -55,6 +55,9 @@ async def cb_submit(call: CallbackQuery, state: FSMContext) -> None:
 
     lead_data = {
         "user_id": user.id,
+        "city": data.get("city"),
+        "district": data.get("district"),
+        "outdoor_work": data.get("outdoor_work", "Нет"),
         "username": user.username,
         "object_type": data.get("object_type"),
         "building_type": data.get("building_type"),
@@ -78,6 +81,7 @@ async def cb_submit(call: CallbackQuery, state: FSMContext) -> None:
         "demolition": data.get("demolition", 0),
         "price_min": data.get("price_min"),
         "price_max": data.get("price_max"),
+        "extra_info": data.get("extra_info", ""),
         "client_name": data.get("client_name"),
         "client_phone": data.get("client_phone"),
         "contact_method": data.get("contact_method"),
